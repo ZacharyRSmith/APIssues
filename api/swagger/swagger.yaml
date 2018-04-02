@@ -8,15 +8,15 @@ host: localhost:10010
 basePath: /
 # 
 schemes:
-  # tip: remove http to make production-grade
+  # TODO: remove http to make production-grade
   - http
   - https
 # format of bodies a client can send (Content-Type)
 consumes:
-  - application/json
+  - application/json; multipart/form-data
 # format of the responses to the client (Accepts)
 produces:
-  - application/json
+  - application/json; charset=utf-8; text/plain
 paths:
   /hello:
     # binds a127 app logic to a route
@@ -46,13 +46,75 @@ paths:
     x-swagger-router-controller: issues
     get:
       # TODO paginate
+      produces:
+        - application/octet-stream
       description: Returns issues
       operationId: index
+      tags:
+        - issues
       responses:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/IssuesIndexResponse"
+            type: "file"
+          # schema:
+          #   $ref: "#/definitions/IssuesIndexResponse"
+    post:
+      consumes:
+        - multipart/form-data
+      produces:
+        - text/plain
+      parameters:
+        - in: formData
+          name: upfile
+          type: file
+      # parameters:
+      #   - in: formData
+      #     name: upfile
+      #     description: The file
+      #     required: false
+      #     type: file
+      operationId: create
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # "200":
+        #   description: Success
+        #   schema:
+        #     $ref: "#/definitions/IssuesIndexResponse"
+        "201":
+          description: OK
+          schema:
+            type: string
+          #     schema:
+          #       type: string
+          #       example: pong
+          # schema:
+          #   $ref: "#/definitions/IssuesIndexResponse"
+  /issues/{_id}:
+    x-swagger-router-controller: issues
+    get:
+      summary: Gets an issue by ID.
+      operationId: getByID
+      tags:
+        - issues
+      produces:
+        - application/json
+      parameters:
+        - name: _id
+          in: path
+          description: Issue ID
+          type: string
+          # format: mongo objectid
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Issue'
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -63,12 +125,22 @@ definitions:
     properties:
       message:
         type: string
-  IssuesIndexResponse:
-    required:
-      - _id
+  Issue:
+    type: object
     properties:
       _id:
         type: string
+      name:
+        type: string
+    required:
+      - _id
+      - name
+  # IssuesIndexResponse:
+  #   # required:
+  #   #   - _id
+  #   properties:
+  #     _id:
+  #       type: string
   ErrorResponse:
     required:
       - message
