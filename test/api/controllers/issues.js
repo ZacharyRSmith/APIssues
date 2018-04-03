@@ -5,8 +5,7 @@ const request = require('supertest');
 const Issue = require('../../../api/models/issue');
 const server = require('../../../app');
 
-const MONGODB = process.env.MONGODB;
-if (!MONGODB) throw new Error(`process.env.MONGODB must be defined.`);
+const MONGODB = process.env.MONGODBTEST || 'mongodb://localhost:27017/issuesTest';
 
 describe('controllers - issues', () => {
     let issue;

@@ -1,36 +1,51 @@
 'use strict';
 
+const async = require('async');
 const errStackLib = require('async-error-stack');
-var SwaggerExpress = require('swagger-express-mw');
-var app = require('express')();
+const SwaggerExpress = require('swagger-express-mw');
+const app = require('express')();
+const mongoose = require('mongoose');
+
+const config = require('./config');
 
 const NODE_ENV = String(process.env.NODE_ENV || 'production');
 
+const logger = console;
+
 errStackLib({
-  disable: NODE_ENV === 'production'
+  disable: NODE_ENV === 'production',
+  logger
 });
 
 process.on('unhandledRejection', (error, p) => {
-  console.error('Unhandled Rejection at: Promise', p, 'error:', error);
+  logger.error('Unhandled Rejection at: Promise', p, 'error:', error);
   throw error;
 });
 
 module.exports = app; // for testing
 
-var config = {
+const swaggerConfig = {
   appRoot: __dirname // required config
 };
 
-SwaggerExpress.create(config, function (err, swaggerExpress) {
-  if (err) { throw err; }
+const initTasks = [
+  cb => {
+    mongoose.connect(config.MONGODB, cb);
+  },
+  cb => {
+    SwaggerExpress.create(swaggerConfig, function (err, swaggerExpress) {
+      if (err) { throw err; }
 
-  // install middleware
-  swaggerExpress.register(app);
+      swaggerExpress.register(app);
 
-  var port = process.env.PORT || 10010;
-  app.listen(port);
+      const port = config.server.PORT;
+      app.listen(port, cb);
 
-  if (swaggerExpress.runner.swagger.paths['/hello']) {
-    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
+      if (swaggerExpress.runner.swagger.paths['/hello']) {
+        logger.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
+      }
+    });
   }
-});
+];
+
+async.series(initTasks);

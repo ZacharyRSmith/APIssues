@@ -12,7 +12,9 @@ module.exports = {
     },
     rules: {
         "handle-callback-err": [ERROR, "^.*(e|E)rr"],
-        "no-warning-comments": WARN
+        "no-warning-comments": WARN,
+        "no-var": ERROR,
+        "prefer-const": WARN
     },
     overrides: [
         {
