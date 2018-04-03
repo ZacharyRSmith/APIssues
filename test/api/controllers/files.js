@@ -13,15 +13,21 @@ describe('controllers - files', () => {
     const basePath = '/files';
 
     before((done) => {
-        mongoose.connect(MONGODB, done);
+        async.series([
+            cb => mongoose.connect(MONGODB, cb),
+            cb => mongoose.connection.db.dropDatabase(cb)
+        ], done);
     });
 
     after((done) => {
-        mongoose.disconnect(done);
+        async.series([
+            cb => mongoose.connection.db.dropDatabase(cb),
+            cb => mongoose.disconnect(cb)
+        ], done);
     });
 
     describe(`GET ${basePath}/{_id}`, () => {
-        it('should return a 404', (done) => {
+        it('should return a 404 when _id does not match', (done) => {
             request(server)
                 .get(`/files/noexist`)
                 .set('Accept', 'application/octet-stream')
@@ -33,7 +39,7 @@ describe('controllers - files', () => {
 
         // Pended because of this:
         // https://github.com/visionmedia/supertest/issues/352
-        xit('should return a file', (done) => {
+        xit('should return a file when fileID matches', (done) => {
             const fileID = 'fileID';
 
             async.series([

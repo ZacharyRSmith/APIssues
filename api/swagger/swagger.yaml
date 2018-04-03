@@ -44,6 +44,33 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /files:
+    x-swagger-router-controller: files
+    post:
+      summary: Creates a file belonging to param issueID.
+      operationId: create
+      consumes:
+        - multipart/form-data
+      tags:
+        - files
+      # produces:
+      #   - application/json
+      parameters:
+        - in: formData
+          name: upfile
+          type: file
+          required: true
+          description: The file to upload.
+        - in: formData
+          name: issueID
+          type: string
+          required: true
+          description: The ID of the issue to which this file belongs.
+      responses:
+        "201":
+          description: OK
+          schema:
+            type: string
   /files/{id}:
     x-swagger-router-controller: files
     get:
