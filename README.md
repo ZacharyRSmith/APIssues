@@ -7,3 +7,7 @@ Enables API client to:
 
 Assumptions:
 - Do not support uploading a file(s) at issue creation time
+
+## Environments
+
+All environments need a connection to a mongo database.

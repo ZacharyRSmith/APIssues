@@ -13,10 +13,12 @@ schemes:
   - https
 # format of bodies a client can send (Content-Type)
 consumes:
-  - application/json; multipart/form-data
+  - application/json
+  - multipart/form-data
 # format of the responses to the client (Accepts)
 produces:
-  - application/json; charset=utf-8; text/plain
+  - application/json; charset=utf-8
+  - text/plain; charset=utf-8
 paths:
   /hello:
     # binds a127 app logic to a route
@@ -42,6 +44,27 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /files/{id}:
+    x-swagger-router-controller: files
+    get:
+      summary: Gets a file by ID.
+      operationId: getByID
+      tags:
+        - files
+      produces:
+        - application/octet-stream
+      parameters:
+        - name: id
+          in: path
+          description: File ID
+          type: string
+          # format: uuid or mongo objectid
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            type: file
   /issues:
     x-swagger-router-controller: issues
     get:

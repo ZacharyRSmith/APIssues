@@ -22,7 +22,7 @@ describe('controllers - issues', () => {
         mongoose.disconnect(done);
     });
 
-    describe('GET /index', () => {
+    describe('GET /issues', () => {
         it('should return an array of issues', (done) => {
             request(server)
                 .get('/issues')

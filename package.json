@@ -27,7 +27,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "node app.js",
-    "test": "mocha test/**/*",
-    "test:watch": "mocha -w test/**/*"
+    "test": "NODE_ENV=test mocha test/**/*.js"
   }
 }
