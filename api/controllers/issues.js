@@ -23,11 +23,16 @@ function index(req, res) {
 
 module.exports = {
     create: (req, res) => {
-        fs.writeFile(__dirname + '/' + 'originalname.png', req.swagger.params.upfile.value.buffer, (writeFileErr) => {
-            if (writeFileErr) return void res.status(500).send(writeFileErr);
-            res.sendStatus(201);
-            // res.status(201).send({ created: true });
+        const body = req.swagger.params.body.value;
+        Issue.create(body, (err, issue) => {
+            if (err) return void res.status(500).send(err);
+            res.status(201).json(issue);
         });
+        // fs.writeFile(__dirname + '/' + 'originalname.png', req.swagger.params.upfile.value.buffer, (writeFileErr) => {
+        //     if (writeFileErr) return void res.status(500).send(writeFileErr);
+        //     res.sendStatus(201);
+        //     // res.status(201).send({ created: true });
+        // });
     },
     getByID,
     index

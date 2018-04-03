@@ -41,7 +41,7 @@ describe('controllers - issues', () => {
         });
     });
 
-    describe('GET /index/{_id}', () => {
+    describe('GET /issues/{_id}', () => {
         it('should return an issue', (done) => {
             request(server)
                 .get(`/issues/${issue._id}`)
@@ -64,6 +64,25 @@ describe('controllers - issues', () => {
                 .expect(404)
                 .end((err) => {
                     expect(err).to.exist;
+
+                    done();
+                });
+        });
+    });
+
+    describe('POST /issues', () => {
+        it('should create an issue', (done) => {
+            const newIssue = { name: 'newIssue' };
+            request(server)
+                .post(`/issues`)
+                .send(newIssue)
+                .set('accept', 'json')
+                .expect(201)
+                .expect('content-type', /json/)
+                .end((err, res) => {
+                    expect(err).not.to.exist;
+
+                    expect(res.body.name).to.equal(newIssue.name);
 
                     done();
                 });

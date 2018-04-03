@@ -60,27 +60,41 @@ paths:
           # schema:
           #   $ref: "#/definitions/IssuesIndexResponse"
     post:
+      operationId: create
+      summary: Adds a new issue.
       consumes:
-        - multipart/form-data
+        - application/json
+        # - multipart/form-data
       produces:
+        - application/json
         - text/plain
       parameters:
-        - in: formData
-          name: upfile
-          type: file
+        - in: body
+          name: body
+          description: The issue to create.
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              name:
+                type: string
+          # description
+        # - in: formData
+        #   name: upfile
+        #   type: file
       # parameters:
       #   - in: formData
       #     name: upfile
       #     description: The file
       #     required: false
       #     type: file
-      operationId: create
       responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+        # "200":
+        #   description: Success
+        #   schema:
+        #     # a pointer to a definition
+        #     $ref: "#/definitions/HelloWorldResponse"
         # "200":
         #   description: Success
         #   schema:
