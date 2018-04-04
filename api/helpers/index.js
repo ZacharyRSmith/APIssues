@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = {
-    CustomError: require('./customError')
+    CustomError: require('./customError'),
+    files: require('./files')
 };
