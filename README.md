@@ -8,6 +8,15 @@ Enables API client to:
 Assumptions:
 - Do not support uploading a file(s) at issue creation time
 
+## Big-pic TODOs, ordered from most important(?) to least
+
+(Note that smaller-pic TODOs are in code)
+
+- Paginate Issues#index
+- Store file names
+- impl access logging
+- get tests to not hang
+
 ## Environments
 
 All environments need a connection to a mongo database.
