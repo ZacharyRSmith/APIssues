@@ -1,3 +1,7 @@
+/**
+ * Files helpers.
+ * @module api/helpers/files
+ */
 'use strict';
 
 const async = require('async');
@@ -8,6 +12,13 @@ const { CustomError } = require('./index');
 const Issue = require('../models/issue');
 const config = require('../../config');
 
+/**
+ * Writes @param0.buffer to file, then stores file's ID in @issueID's issue.
+ * @param {Object} param0 - args
+ * @param {Buffer} param0.buffer - Buffer to write to file.
+ * @param {string} param0.issueID - ID of issue the created file will belong to.
+ * @param {function(Error, Object):void} mainCb - Callback.
+ */
 function create({ buffer, issueID }, mainCb) {
     async.auto({
         issue: cb => Issue.findOne({ _id: issueID }, cb),

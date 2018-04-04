@@ -1,3 +1,7 @@
+/**
+ * Files controller.
+ * @module api/controllers/files
+ */
 'use strict';
 
 const fs = require('fs');
@@ -6,6 +10,11 @@ const { files } = require('../helpers');
 
 const config = require('../../config');
 
+/**
+ * Creates a file.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 function create(req, res) {
     const issueID = req.swagger.params.issueID.value;
     // TODO: Store value's `originalname` somewhere...
@@ -17,6 +26,11 @@ function create(req, res) {
     });
 }
 
+/**
+ * Gets a file by ID.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 function getByID(req, res) {
     const id = req.swagger.params.id.value;
     fs.readFile(`${config.filesDir}/${id}`, (err, file) => {

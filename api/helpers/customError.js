@@ -1,6 +1,13 @@
 'use strict';
 
+/** CustomError assigns @customArgs.code to instances. */
 class CustomError extends Error {
+    /**
+     * 
+     * @param {Object} customArgs - Custom args.
+     * @param {number} customArgs.code - Error code.
+     * @param {...*} args - Normal Error args.
+     */
     constructor(customArgs, ...args) {
         super(...args);
 

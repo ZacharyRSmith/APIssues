@@ -1,9 +1,18 @@
+/**
+ * Issues controller.
+ * @module api/controllers/issues
+ */
 'use strict';
 
 require('mongoose')
 
 const Issue = require('../models/issue');
 
+/**
+ * Creates an Issue.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 function create(req, res) {
     const body = req.swagger.params.body.value;
     Issue.create(body, (err, issue) => {
@@ -12,6 +21,11 @@ function create(req, res) {
     });
 }
 
+/**
+ * Gets an Issue by ID.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 function getByID(req, res) {
     const criteria = { _id: req.swagger.params._id.value };
     Issue.findOne(criteria).lean().exec((err, issue) => {
@@ -21,6 +35,11 @@ function getByID(req, res) {
     });
 }
 
+/**
+ * Gets Issues.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 function index(req, res) {
     // TODO paginate
     Issue.find({}).lean().exec((err, issues) => {
