@@ -102,13 +102,16 @@ paths:
       operationId: index
       tags:
         - issues
+      parameters:
+        - in: query
+          name: cursor
+          description: Pagination end-cursor
+          type: string
       responses:
         "200":
           description: Success
           schema:
             type: "file"
-          # schema:
-          #   $ref: "#/definitions/IssuesIndexResponse"
     post:
       operationId: create
       summary: Adds a new issue.

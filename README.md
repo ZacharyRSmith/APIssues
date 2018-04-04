@@ -12,7 +12,7 @@ Assumptions:
 
 (Note that smaller-pic TODOs are in code)
 
-- Paginate Issues#index
+- Clean up swagger
 - Store file names
 - impl access logging
 - get tests to not hang

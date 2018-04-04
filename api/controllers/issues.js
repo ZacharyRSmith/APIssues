@@ -41,10 +41,21 @@ function getByID(req, res) {
  * @param {Object} res - Express response object
  */
 function index(req, res) {
-    // TODO paginate
-    Issue.find({}).lean().exec((err, issues) => {
+    const cursor = req.swagger.params.cursor.value;
+    const criteria = cursor ? { _id: { $gt: cursor } } : {};
+    Issue.find(criteria).sort({ _id: 1 }).limit(31).lean().exec((err, issues) => {
         if (err) return void res.status(500).send(err);
-        res.json(issues);
+        const hasNextPage = issues.length === 31;
+        if (hasNextPage) issues.pop(); // (╯°□°）╯︵ ┻━┻
+        const endIssue = issues.length && issues.slice(-1)[0];
+
+        res.json({
+            pageInfo: {
+                endCursor: endIssue ? endIssue._id : null, // TODO: Send back 64-base encoded value to obfuscate cursor impl
+                hasNextPage
+            },
+            results: issues
+        });
     });
 }
 
